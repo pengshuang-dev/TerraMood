@@ -1,0 +1,32 @@
+# Xcode 构建产物与缓存
+build/
+DerivedData/
+*.xcuserdata
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# SwiftPM
+.build/
+Packages/
+Package.resolved
+
+# 系统垃圾
+.DS_Store
+*.swp
+*~.nib
+
+# 密钥/敏感（重要！）
+*.p8
+*.mobileprovision
+secrets.json
+.env
+
+# 大资产（可选：音频/贴图若很大，考虑用 Git LFS 或不入库）
+# *.caf
+# *.png
+
+# Cloudflare Workers（依赖与 wrangler 本地状态，不入库）
+node_modules/
+.wrangler/
