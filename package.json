@@ -1,0 +1,15 @@
+{
+  "name": "terramood-workers",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --test-scheduled",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5",
+    "typescript": "^5.9.2",
+    "wrangler": "^4.38.0"
+  }
+}
