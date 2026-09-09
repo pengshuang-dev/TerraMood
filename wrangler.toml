@@ -1,0 +1,41 @@
+# ============================================================
+# Terra Mood · Workers 聚合层（Card 13-Rev v2）
+# 与仓库根部 worker/（mood 服务）无关，本目录是 /v1/now 数据聚合 Worker。
+# ============================================================
+
+name = "terramood-api"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+# ---- KV 绑定 ----
+# 先执行:  wrangler kv namespace create TERRA_KV
+# 把命令输出的 id 填到下面（见 DEPLOY_GUIDE.md 第 2 步）
+[[kv_namespaces]]
+binding = "TERRA_KV"
+id = "b36e623d3b45487e95247481a870889b"
+
+# ---- 自定义域路由（api.trylinea.art）----
+# Custom Domain 模式：wrangler deploy 时自动创建该子域的 DNS 解析记录并绑定，
+# 无需手动配置解析（前提：trylinea.art 已在当前 Cloudflare 账号且 zone 状态 Active）。
+# 注意：custom_domain 的 pattern 只能是裸 hostname（不能带路径），
+# /v1/now 等路径由 Worker 内部路由区分。
+routes = [
+  { pattern = "api.trylinea.art", custom_domain = true }
+]
+
+# ---- Cron Triggers 分级拉取（Card §3）----
+#   */15  → USGS 地震
+#   */30  → SWPC 极光 ovation + Kp
+#   0 */3 → NHC 台风
+#   0 */6 → EONET 火山 + FIRMS 野火
+#   0 0   → GIBS 云（日更，仅产出瓦片模板）
+# 注意：Free plan 每 Worker 上限 3 条 cron（Paid 60 条）。
+# 免费版合并为 3 条的等价配置见 DEPLOY_GUIDE.md 附录 A。
+[triggers]
+crons = [
+  "*/15 * * * *",
+  "*/30 * * * *",
+  "0 */3 * * *",
+  "0 */6 * * *",
+  "0 0 * * *",
+]
